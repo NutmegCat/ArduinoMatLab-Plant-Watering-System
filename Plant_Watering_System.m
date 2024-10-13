@@ -21,11 +21,11 @@ stop = 0;
 
 % beginning stop loop
 while ~stop
-    moist = readVoltage(a, 'A1'); % variable for moisture sensor voltage
+    dryness = readVoltage(a, 'A1'); % variable for moisture sensor voltage
 
     t = dateTime('now') - startTime; % current time
 
-    addpoints(h, datenum(t), moist) % points to graph
+    addpoints(h, datenum(t), dryness) % points to graph
 
     % update axes
     ax.XLim = datenum([t-seconds(15) t]);
@@ -33,17 +33,17 @@ while ~stop
     drawnow
 
     % conditional for dry soil
-    if (moist > 3.5)
+    if (dryness > 3.5)
         plant_state = "Thirsty";
         disp(plant_state);
         writeDigitalPin(a, 'D2', 1)
     % conditional for semi-wet soil
-    elseif (moist > 2.7)
+    elseif (dryness > 2.7)
         plant_state = "A bit of water is needed";
         disp(plant_state);
         writeDigitalPin(a, 'D2', 1)
     % conditional for wet soil
-    elseif (moist <= 2.7)
+    elseif (dryness <= 2.7)
         plant_state = "Watered";
         disp(plant_state);
         writeDigitalPin(a, 'D2', 0)
