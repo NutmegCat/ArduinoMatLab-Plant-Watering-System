@@ -50,4 +50,7 @@ while ~stop
         writeDigitalPin(a, 'D2', 0)
         stop = 1;
     end
+
+    % stop condition when button (D6) is pressed
+    stop = readDigitalPin(a, 'D6');
 end
