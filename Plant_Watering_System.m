@@ -1,5 +1,5 @@
 function plant_state = Plant_Watering_System
-a = arduino('COM5', 'Nano3')
+a = arduino('COM5', 'Nano3');
 
 % live graph setup
 figure(1)
