@@ -5,32 +5,13 @@ clc
 
 a = arduino('COM5', 'Nano3');
 
-% live graph setup
-% figure(1)
-% h = animatedLine;
-% ax = gca;
-% ax.YGrid = 'on';
-% ax.YLim = [-0.1 5];
-% title("Moisture Sensor v. Time (LIVE)");
-% ylabel("Moisture Sensor Voltage (Volts)");
-% xlabel("Tiem [HH:mm:SS]");
-startTime = datetime("now");
-
 % stop condition
 stop = 0;
 
 % beginning stop loop
 while ~stop
+    
     dryness = readVoltage(a, 'A1'); % variable for moisture sensor voltage
-
-    t = datetime('now') - startTime; % current time
-
-    %addpoints(h, datenum(t), dryness) % points to graph
-
-    % update axes
-    ax.XLim = datenum([t-seconds(15) t]);
-    datetick('x', 'keeplimits')
-    drawnow
 
     % conditional for dry soil
     if (dryness > 3.5)
