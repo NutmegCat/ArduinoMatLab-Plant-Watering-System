@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Watering System Flowchart</title>
+    <script type="module">
+        // Import Mermaid library for rendering the flowchart
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Initialize mermaid for rendering
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <!-- The div that will contain the flowchart -->
+    <div class="mermaid">
+        graph TD;
+        A["Start function Plant_Watering_System"] --> B["Declare moisture variables"];
+        B --> C["Create graph for Dryness over Time"];
+        B -.-> D["reallyDryValue = 2.4"];
+        B -.-> E["moistureThreshold = 1.6"];
+        B -.-> F["saturatedValue = 1.6"];
+        C --> G["Set y-axis range to [0, 4]"];
+        C --> H["Start timer for elapsed time"];
+        H --> I{"Loop: While stop != 1"};
+        I --> J["Read dryness value from sensor"];
+        J --> K["Update graph with dryness and time"];
+        K --> L{"Check dryness > reallyDryValue?"};
+        L -- Yes --> M["Plant state: Thirsty"];
+        M --> N["Watering On"];
+        L -- No --> O{"Check dryness > moistureThreshold?"};
+        O -- Yes --> P["Plant state: A bit of water needed"];
+        P --> N["Watering On"];
+        O -- No --> Q{"Check dryness <= saturatedValue?"};
+        Q -- Yes --> R["Plant state: Watered"];
+        R --> S["Watering Off"];
+        Q -- No --> T["System Failure"];
+        T --> U["Stop"];
+        S --> I;
+        N --> I;
+    </div>
+</body>
+</html>
