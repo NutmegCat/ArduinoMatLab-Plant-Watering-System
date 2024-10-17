@@ -6,9 +6,9 @@ clc
 a = arduino('COM5', 'Nano3');
 
 % watering values
-reallyDryValue = 3.5;
-moistureThreshold = 2.7;
-saturaedValue = 2.7;
+reallyDryValue = 2.4;
+moistureThreshold = 1.6;
+saturaedValue = 1.6;
 
 % stop condition
 stop = 0;
