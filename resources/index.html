@@ -5,24 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flowchart for Plant Watering System</title>
     <script type="module">
-        // Load Mermaid
+        // load mermaid
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true });
+        mermaid.initialize({
+            startOnLoad: true,
+            themeVariables: {
+                fontSize: '24px' // increase font size to 24px for better readability
+            }
+        });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* Add some styles for better visibility */
+        /* set the size of the flowchart without scaling */
         .mermaid {
-            background-color: #f9f9f9; /* Light background for contrast */
-            border: 1px solid #ccc; /* Light border */
-            padding: 20px; /* Padding around the diagram */
-            border-radius: 8px; /* Rounded corners */
+            background-color: #f9f9f9; /* light background for contrast */
+            border: 1px solid #ccc; /* light border */
+            padding: 10px; /* padding around the diagram */
+            border-radius: 8px; /* rounded corners */
+            max-width: 1000px; /* set maximum width for the diagram */
+            margin: auto; /* center the chart */
         }
-        /* Add a button to download the image */
+        /* add a button to download the image */
         #download {
             margin-top: 20px;
             padding: 10px 20px;
-            background-color: #008080; /* Teal background */
+            background-color: #008080; /* teal background */
             color: white;
             border: none;
             border-radius: 5px;
@@ -49,14 +56,14 @@
             J --> K[Update graph with dryness and time]
             K --> L{Is dryness > reallyDryValue?}
             style L fill:#f9f,stroke:#333,stroke-width:2px
-            L -->|Yes| M[Thirsty: Water ON]
-            L -->|No| N{Is dryness > moistureThreshold?}
+            L -- Yes --> M[Thirsty: Water ON]
+            L -- No --> N{Is dryness > moistureThreshold?}
             style N fill:#f9f,stroke:#333,stroke-width:2px
-            N -->|Yes| O[A bit of water needed: Water ON]
-            N -->|No| P{Is dryness <= saturatedValue?}
+            N -- Yes --> O[A bit of water needed: Water ON]
+            N -- No --> P{Is dryness <= saturatedValue?}
             style P fill:#f9f,stroke:#333,stroke-width:2px
-            P -->|Yes| Q[Watered: Water OFF]
-            P -->|No| R[SYSTEM FAILURE: Stop]
+            P -- Yes --> Q[Watered: Water OFF]
+            P -- No --> R[SYSTEM FAILURE: Stop]
             style R fill:#ff4d4d,stroke:#333,stroke-width:2px
             Q --> I
             M --> I
@@ -72,8 +79,11 @@
 
     <script>
         document.getElementById('download').onclick = function() {
-            html2canvas(document.getElementById('flowchart')).then(function(canvas) {
-                // Convert canvas to PNG
+            html2canvas(document.getElementById('flowchart'), {
+                useCORS: true, /* ensures cross-origin content is captured if any */
+                scale: 2 /* increase resolution for better quality output */
+            }).then(function(canvas) {
+                // convert canvas to PNG
                 var link = document.createElement('a');
                 link.href = canvas.toDataURL('image/png');
                 link.download = 'flowchart.png';
