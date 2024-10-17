@@ -22,6 +22,10 @@ title('Dryness over Time');
 grid on;
 hold on;
 
+% set the y-axis limit to a fixed range [0, 4]
+ax = gca;
+ax.YLim = [0, 4];  % make y-axis static with max value at 4 - the max value the moisture sensor can read is around 3.5
+
 % initialize the start time
 startTime = datetime('now');
 
@@ -36,7 +40,6 @@ while ~stop
     addpoints(h, datenum(currentTime), dryness);
 
     % dynamically adjust the x-axis limits to keep the graph expanding
-    ax = gca;
     ax.XLim = datenum([startTime, currentTime]);
 
     % update the graph
