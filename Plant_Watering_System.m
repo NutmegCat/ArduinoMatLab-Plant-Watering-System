@@ -16,7 +16,7 @@ stop = 0;
 % create the figure and initialize the animated line
 figure(1);
 h = animatedline('Color', 'b', 'LineWidth', 2);
-xlabel('Time (HH:MM:SS)');
+xlabel('Elapsed Time (HH:MM:SS)');
 ylabel('Dryness (voltage)');
 title('Dryness over Time');
 grid on;
@@ -24,29 +24,28 @@ hold on;
 
 % set the y-axis limit to a fixed range [0, 4]
 ax = gca;
-ax.YLim = [0, 4];  % make y-axis static with max value at 4 - the max value the moisture sensor can read is around 3.5
+ax.YLim = [0, 4];  % make y-axis static with max value at 4
 
-% initialize the start time
-startTime = datetime('now');
+% initialize the start time (set it as 0)
+startTime = tic;  % start a timer
 
 % beginning stop loop
 while ~stop
 
     dryness = readVoltage(a, 'A1');  % read moisture sensor voltage
-    currentTime = datetime('now');   % get current time
-    elapsedTime = currentTime - startTime;  % calculate elapsed time as duration
+    elapsedTime = toc(startTime);    % get the elapsed time in seconds since the timer started
 
-    % add points to the animated line (time in datetime format)
-    addpoints(h, datenum(currentTime), dryness);
+    % add points to the animated line (convert elapsedTime to datenum)
+    addpoints(h, elapsedTime, dryness);
 
     % dynamically adjust the x-axis limits to keep the graph expanding
-    ax.XLim = datenum([startTime, currentTime]);
+    ax.XLim = [0, elapsedTime];
 
     % update the graph
     drawnow limitrate;  % 'limitrate' makes plotting smoother by limiting updates
 
     % format the x-axis to display as HH:MM:SS
-    datetick('x', 'HH:MM:SS', 'keeplimits');
+    ax.XTickLabel = datestr(seconds(ax.XTick), 'HH:MM:SS');  % set the x-axis labels to HH:MM:SS
 
     % conditional for dry soil
     if (dryness > reallyDryValue)
@@ -81,5 +80,5 @@ while ~stop
     stop = readDigitalPin(a, 'D6');
 end
 
-% convert datetime numbers to HH:MM:SS format at the end
-datetick('x', 'HH:MM:SS', 'keepticks');
+% final update to the x-axis labels as HH:MM:SS
+ax.XTickLabel = datestr(seconds(ax.XTick), 'HH:MM:SS');
