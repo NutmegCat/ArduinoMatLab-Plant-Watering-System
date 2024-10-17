@@ -13,20 +13,40 @@ saturatedValue = 1.6;
 % stop condition
 stop = 0;
 
-% initialize arrays to store time and dryness data
-timeData = [];
-drynessData = [];
+% pre-allocate arrays for 1000 data points (you can adjust this)
+timeData = nan(1, 1000);
+drynessData = nan(1, 1000);
 startTime = datetime('now');  % record the starting time
 
-% beginning stop loop
+% create the figure and initialize the plot
+figure(1);
+hPlot = plot(nan, nan, 'b-', 'LineWidth', 2);
+xlabel('Time (seconds)');
+ylabel('Dryness (voltage)');
+title('Dryness over Time');
+grid on;
+hold on;
+
+% initialize the index for data storage
+idx = 1;
+
+% beginning loop
 while ~stop
 
     dryness = readVoltage(a, 'A1'); % variable for moisture sensor voltage
     elapsedTime = seconds(datetime('now') - startTime);  % calculate elapsed time
 
-    % store time and dryness data for plotting
-    timeData(end + 1) = elapsedTime;
-    drynessData(end + 1) = dryness;
+    % store time and dryness data
+    if idx <= length(timeData)
+        timeData(idx) = elapsedTime;
+        drynessData(idx) = dryness;
+    else
+        % dynamically grow the arrays if more space is needed
+        timeData = [timeData, nan(1, 1000)];
+        drynessData = [drynessData, nan(1, 1000)];
+        timeData(idx) = elapsedTime;
+        drynessData(idx) = dryness;
+    end
 
     % conditional for dry soil
     if (dryness > reallyDryValue)
@@ -57,15 +77,19 @@ while ~stop
         stop = 1;
     end
 
+    % update the plot every 10 iterations to avoid slowing down the loop
+    if mod(idx, 10) == 0
+        set(hPlot, 'XData', timeData(~isnan(timeData)), 'YData', drynessData(~isnan(drynessData)));
+        drawnow;  % update the plot
+    end
+
+    % increment index
+    idx = idx + 1;
+
     % stop condition when button (D6) is pressed
     stop = readDigitalPin(a, 'D6');
-
-    % plot the dryness vs. time graph continuously
-    figure(1);
-    plot(timeData, drynessData, 'b-', 'LineWidth', 2);
-    xlabel('Time (seconds)');
-    ylabel('Dryness (voltage)');
-    title('Dryness over Time');
-    grid on;
-    drawnow;  % update the plot
 end
+
+% final plot update after loop ends
+set(hPlot, 'XData', timeData(~isnan(timeData)), 'YData', drynessData(~isnan(drynessData)));
+drawnow;
