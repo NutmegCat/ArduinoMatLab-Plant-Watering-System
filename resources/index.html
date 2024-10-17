@@ -9,6 +9,7 @@
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: true });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* Add some styles for better visibility */
         .mermaid {
@@ -17,66 +18,69 @@
             padding: 20px; /* Padding around the diagram */
             border-radius: 8px; /* Rounded corners */
         }
+        /* Add a button to download the image */
+        #download {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #008080; /* Teal background */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <h1>Flowchart for Plant Watering System</h1>
-    <div class="mermaid">
+    <div class="mermaid" id="flowchart">
         flowchart TD
             A[Start function Plant_Watering_System] --> B[Declare moisture variables]
             B --> C[reallyDryValue = 2.4]
             B --> D[moistureThreshold = 1.6]
             B --> E[saturatedValue = 1.6]
             E --> F[Create graph for Dryness over Time]
-
-            %% Node for graph creation
             style F fill:#f9f,stroke:#333,stroke-width:2px
-            
             F --> G[Set y-axis range 0 to 4]
             G --> H[Start timer]
-
             H --> I{Loop: While stop is not 1}
-            
-            %% Loop condition
             style I fill:#ffcc00,stroke:#333,stroke-width:2px
-            
             I --> J[Read dryness value]
             J --> K[Update graph with dryness and time]
             K --> L{Is dryness > reallyDryValue?}
-
-            %% Decision nodes
             style L fill:#f9f,stroke:#333,stroke-width:2px
-
             L -->|Yes| M[Thirsty: Water ON]
             L -->|No| N{Is dryness > moistureThreshold?}
-            
             style N fill:#f9f,stroke:#333,stroke-width:2px
-
             N -->|Yes| O[A bit of water needed: Water ON]
             N -->|No| P{Is dryness <= saturatedValue?}
-
             style P fill:#f9f,stroke:#333,stroke-width:2px
-
             P -->|Yes| Q[Watered: Water OFF]
             P -->|No| R[SYSTEM FAILURE: Stop]
-
-            %% Final node for system failure
             style R fill:#ff4d4d,stroke:#333,stroke-width:2px
-            
             Q --> I
             M --> I
             O --> I
             R --> S[Stop]
-
-            %% Ending node
-            style S fill:#ff4d4d,stroke:#333,stroke-width:2px
-
-            %% Teal color for variables
-            style C fill:#21c4c4,stroke:#333,stroke-width:2px
-            style D fill:#21c4c4,stroke:#333,stroke-width:2px
-            style E fill:#21c4c4,stroke:#333,stroke-width:2px
+            style S fill:#ffcc00,stroke:#333,stroke-width:2px
+            style C fill:#008080,stroke:#333,stroke-width:2px
+            style D fill:#008080,stroke:#333,stroke-width:2px
+            style E fill:#008080,stroke:#333,stroke-width:2px
     </div>
+
+    <button id="download">Download as PNG</button>
+
+    <script>
+        document.getElementById('download').onclick = function() {
+            html2canvas(document.getElementById('flowchart')).then(function(canvas) {
+                // Convert canvas to PNG
+                var link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'flowchart.png';
+                link.click();
+            });
+        };
+    </script>
 
 </body>
 </html>
