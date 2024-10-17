@@ -25,11 +25,6 @@ hold on;
 % initialize the start time
 startTime = datetime('now');
 
-% format x-axis for time in HH:MM:SS format
-ax = gca;
-ax.XAxis.TickLabelFormat = 'HH:mm:ss';
-datetick('x', 'HH:MM:SS', 'keeplimits');
-
 % beginning stop loop
 while ~stop
 
@@ -41,10 +36,14 @@ while ~stop
     addpoints(h, datenum(currentTime), dryness);
 
     % dynamically adjust the x-axis limits to keep the graph expanding
+    ax = gca;
     ax.XLim = datenum([startTime, currentTime]);
 
     % update the graph
     drawnow limitrate;  % 'limitrate' makes plotting smoother by limiting updates
+
+    % format the x-axis to display as HH:MM:SS
+    datetick('x', 'HH:MM:SS', 'keeplimits');
 
     % conditional for dry soil
     if (dryness > reallyDryValue)
