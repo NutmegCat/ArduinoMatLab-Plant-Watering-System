@@ -16,27 +16,32 @@ stop = 0;
 % create the figure and initialize the animated line
 figure(1);
 h = animatedline('Color', 'b', 'LineWidth', 2);
-xlabel('Time (seconds)');
+xlabel('Time (HH:MM:SS)');
 ylabel('Dryness (voltage)');
 title('Dryness over Time');
 grid on;
 hold on;
 
-% set axis limits (adjust as needed)
-xlim([0, 100]);  % adjust the time range
-ylim([0, 5]);    % adjust based on expected dryness values
-
 % initialize the start time
 startTime = datetime('now');
+
+% format x-axis for time in HH:MM:SS format
+ax = gca;
+ax.XAxis.TickLabelFormat = 'HH:mm:ss';
+datetick('x', 'HH:MM:SS', 'keeplimits');
 
 % beginning stop loop
 while ~stop
 
-    dryness = readVoltage(a, 'A1'); % variable for moisture sensor voltage
-    elapsedTime = seconds(datetime('now') - startTime);  % calculate elapsed time
+    dryness = readVoltage(a, 'A1');  % read moisture sensor voltage
+    currentTime = datetime('now');   % get current time
+    elapsedTime = currentTime - startTime;  % calculate elapsed time as duration
 
-    % add points to the animated line
-    addpoints(h, elapsedTime, dryness);
+    % add points to the animated line (time in datetime format)
+    addpoints(h, datenum(currentTime), dryness);
+
+    % dynamically adjust the x-axis limits to keep the graph expanding
+    ax.XLim = datenum([startTime, currentTime]);
 
     % update the graph
     drawnow limitrate;  % 'limitrate' makes plotting smoother by limiting updates
@@ -73,3 +78,6 @@ while ~stop
     % stop condition when button (D6) is pressed
     stop = readDigitalPin(a, 'D6');
 end
+
+% convert datetime numbers to HH:MM:SS format at the end
+datetick('x', 'HH:MM:SS', 'keepticks');
