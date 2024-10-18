@@ -40,25 +40,38 @@
   <body>
     <h1>Flowchart for Plant Watering System</h1>
     <div class="mermaid" id="flowchart">
-      flowchart TD A[Start function Plant_Watering_System] --> B[Declare
-      moisture variables] B --> C[reallyDryValue = 2.4] B -->
-      D[moistureThreshold = 1.6] B --> E[saturatedValue = 1.6] E --> F[Create
-      graph for Dryness over Time] style F
-      fill:#f9f,stroke:#333,stroke-width:2px F --> G[Set y-axis range 0 to 4] G
-      --> H[Start timer] H --> I{Loop: While stop is not 1} style I
-      fill:#ffcc00,stroke:#333,stroke-width:2px I --> J[Read dryness value] J
-      --> K[Update graph with dryness and time] K --> L{Is dryness >
-      reallyDryValue?} style L fill:#f9f,stroke:#333,stroke-width:2px L -- Yes
-      --> M[Thirsty: Water ON] L -- No --> N{Is dryness > moistureThreshold?}
-      style N fill:#f9f,stroke:#333,stroke-width:2px N -- Yes --> O[A bit of
-      water needed: Water ON] N -- No --> P{Is dryness <= saturatedValue?} style
-      P fill:#f9f,stroke:#333,stroke-width:2px P -- Yes --> Q[Watered: Water
-      OFF] P -- No --> R[SYSTEM FAILURE: Stop] style R
-      fill:#ff4d4d,stroke:#333,stroke-width:2px Q --> I M --> I O --> I R -->
-      S[Stop] style S fill:#ffcc00,stroke:#333,stroke-width:2px style C
-      fill:#008080,stroke:#333,stroke-width:2px style D
-      fill:#008080,stroke:#333,stroke-width:2px style E
-      fill:#008080,stroke:#333,stroke-width:2px
+      flowchart TD 
+        A[Start function Plant_Watering_System] --> B[Declare moisture variables]
+        B --> C[reallyDryValue = 2.4] 
+        B --> D[moistureThreshold = 1.6] 
+        B --> E[saturatedValue = 1.6] 
+        B --> F[Create graph for Dryness over Time] 
+        style F fill:#f9f,stroke:#333,stroke-width:2px 
+        F --> G[Set y-axis range 0 to 4] 
+        G --> H[Start timer] 
+        H --> I{Loop: While stop is not 1} 
+        style I fill:#ffcc00,stroke:#333,stroke-width:2px 
+        I --> J[Read dryness value] 
+        J --> K[Update graph with dryness and time] 
+        K --> L{Is dryness > reallyDryValue?} 
+        style L fill:#f9f,stroke:#333,stroke-width:2px 
+        L -- Yes --> M[Thirsty: Water ON] 
+        L -- No --> N{Is dryness > moistureThreshold?} 
+        style N fill:#f9f,stroke:#333,stroke-width:2px 
+        N -- Yes --> O[A bit of water needed: Water ON] 
+        N -- No --> P{Is dryness <= saturatedValue?} 
+        style P fill:#f9f,stroke:#333,stroke-width:2px 
+        P -- Yes --> Q[Watered: Water OFF] 
+        P -- No --> R[SYSTEM FAILURE: Stop] 
+        style R fill:#ff4d4d,stroke:#333,stroke-width:2px 
+        Q --> I 
+        M --> I 
+        O --> I 
+        R --> S[Stop] 
+        style S fill:#ffcc00,stroke:#333,stroke-width:2px 
+        style C fill:#008080,stroke:#333,stroke-width:2px 
+        style D fill:#008080,stroke:#333,stroke-width:2px 
+        style E fill:#008080,stroke:#333,stroke-width:2px
     </div>
 
     <button id="download">Download as PNG</button>
