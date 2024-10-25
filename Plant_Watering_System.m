@@ -67,6 +67,7 @@ while ~stop
         disp(plant_state);
         writeDigitalPin(a, 'D2', 0);
         writeDigitalPin(a, 'D4', 0);
+        pause(3600);
 
         % conditional if failure
     else
